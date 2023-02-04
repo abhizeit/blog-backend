@@ -9,7 +9,7 @@ app.patch("/likeBlog", authmiddleware, async (req, res) => {
     const updatedBlog = await Blog.findByIdAndUpdate(
       blogId,
       {
-        $push: { likes: req.id },
+        $addToSet: { likes: req.id },
       },
       { new: true }
     )
@@ -31,7 +31,7 @@ app.patch("/likeBlog", authmiddleware, async (req, res) => {
     res.send({ error: true, message: e.message });
   }
 });
-app.patch("/dislikeBlog", authmiddleware, async (req, res) => {
+app.patch("/unlikeBlog", authmiddleware, async (req, res) => {
   try {
     const { blogId } = req.body;
     const updatedBlog = await Blog.findByIdAndUpdate(

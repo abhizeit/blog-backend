@@ -41,6 +41,7 @@ app.post("/", authmiddleware, async (req, res) => {
 
 app.patch("/", authmiddleware, async (req, res) => {
   const { blogId, commentId } = req.body;
+  console.log(blogId, commentId);
   try {
     const blog = await Blog.findByIdAndUpdate(
       blogId,

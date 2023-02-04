@@ -5,6 +5,7 @@ const Blog = require("../models/blog.model");
 const app = express.Router();
 
 app.get("/", async (req, res) => {
+  console.log(req.ip);
   try {
     const blogs = await Blog.find()
       .sort({ _id: -1 })
@@ -25,6 +26,7 @@ app.get("/", async (req, res) => {
 //include authmiddleware
 app.post("/", authmiddleware, async (req, res) => {
   const { title, article } = req.body;
+  console.log(title, article);
   try {
     const blog = await (
       await Blog.create({ author: req.id, title, article })
@@ -36,6 +38,7 @@ app.post("/", authmiddleware, async (req, res) => {
 });
 
 app.delete("/:id", authmiddleware, async (req, res) => {
+  console.log("delete triggered");
   const blog = await Blog.findById(req.params.id);
   if (!req.id.equals(blog.author)) {
     return res.status(401).send({
@@ -51,7 +54,7 @@ app.patch("/:id", authmiddleware, async (req, res) => {
   const { title, article } = req.body;
   const post = await Blog.findById(req.params.id);
   if (req.id !== post._id) {
-    return res.status(401).send("You are not authorized to use this app.");
+    return res.status(401).send({ errro: true });
   }
   const update = await Blog.findByIdAndUpdate(
     post._id,

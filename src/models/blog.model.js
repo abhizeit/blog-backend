@@ -33,6 +33,7 @@ const blogSchema = new mongoose.Schema(
         type: mongoose.Types.ObjectId,
         ref: "user",
         required: true,
+        unique: true,
       },
     ],
   },

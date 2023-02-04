@@ -6,10 +6,9 @@ const jwt = require("jsonwebtoken");
 const authmiddleware = require("../middlewares/auth.middleware");
 
 app.post("/refresh", async (req, res) => {
-  console.log("this is refresh");
-  const { rToken, token } = req.body;
   // redis.push(token)
   try {
+    const { rToken } = req.body;
     const verification = jwt.verify(rToken, process.env.REFRESH_SECRET);
     const user = await User.findOne({ email: verification.email });
     const { email, name, password } = user;
@@ -25,31 +24,30 @@ app.post("/refresh", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  console.log("this is sign up");
-  const { name, email, password } = req.body;
-  const hash = await argon2.hash(password);
   try {
+    const { name, email, password } = req.body;
+    const hash = await argon2.hash(password);
     let user = await User.create({ name, email, password: hash });
-    const token = jwt.sign(
-      { id: user._id, email, password: hash, name },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "7 days",
-      }
-    );
-    const rToken = jwt.sign(
-      { id: user._id, email, password: hash, name },
-      process.env.REFRESH_SECRET,
-      {
-        expiresIn: "28 days",
-      }
-    );
+    // const token = jwt.sign(
+    //   { id: user._id, email, password: hash, name },
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: "7 days",
+    //   }
+    // );
+    // const rToken = jwt.sign(
+    //   { id: user._id, email, password: hash, name },
+    //   process.env.REFRESH_SECRET,
+    //   {
+    //     expiresIn: "28 days",
+    //   }
+    // );
     res.send({
       error: false,
       message: "user created successfully.",
-      name: user.name,
-      token,
-      rToken,
+      // name: user.name,
+      // token,
+      // rToken,
     });
   } catch (e) {
     res.send({ error: true, message: "user already exists." });
@@ -60,11 +58,6 @@ app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) {
-      return res
-        .status(403)
-        .send({ error: true, message: "wrong credentials" });
-    }
     const match = await argon2.verify(user.password, password);
     if (match) {
       const token = jwt.sign(
@@ -87,11 +80,11 @@ app.post("/login", async (req, res) => {
         rToken,
       });
     } else {
-      return res.send({ error: true, message: "wrong password" });
+      return res.send({ error: true, message: "Wrong Password!!" });
     }
   } catch (e) {
     console.log(e.message);
-    res.send({ error: true, message: "unknown error occured" });
+    res.send({ error: true, message: "Wrong Credential!!" });
   }
 });
 

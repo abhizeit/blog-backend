@@ -37,6 +37,12 @@ io.on("connection", (socket) => {
   socket.on("delete-blog", (data) => {
     socket.broadcast.emit("delete-blog", data);
   });
+  socket.on("add-like", (data) => {
+    socket.broadcast.emit("add-like", data);
+  });
+  socket.on("remove-like", (data) => {
+    socket.broadcast.emit("remove-like", data);
+  });
 });
 
 app.get("/", (req, res) => {
