@@ -8,6 +8,7 @@ const userRoutes = require("./controllers/user.routes");
 const blogRoutes = require("./controllers/blog.routes");
 const commenRoutes = require("./controllers/comment.routes");
 const likeRoutes = require("./controllers/like.routes");
+const trendingRoutes = require("./controllers/trending.routes");
 const connect = require("./config/db");
 
 const app = express();
@@ -53,6 +54,7 @@ app.use("/users", userRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/comments", commenRoutes);
 app.use("/likes", likeRoutes);
+app.use("/trending", trendingRoutes);
 
 httpServer.listen(8080, async () => {
   await connect();

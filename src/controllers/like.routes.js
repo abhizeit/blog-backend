@@ -5,11 +5,12 @@ const authmiddleware = require("../middlewares/auth.middleware");
 const app = express.Router();
 app.patch("/likeBlog", authmiddleware, async (req, res) => {
   try {
-    const { blogId } = req.body;
+    const { blogId, likesCount } = req.body;
     const updatedBlog = await Blog.findByIdAndUpdate(
       blogId,
       {
         $addToSet: { likes: req.id },
+        likesCount,
       },
       { new: true }
     )
@@ -33,11 +34,12 @@ app.patch("/likeBlog", authmiddleware, async (req, res) => {
 });
 app.patch("/unlikeBlog", authmiddleware, async (req, res) => {
   try {
-    const { blogId } = req.body;
+    const { blogId, likesCount } = req.body;
     const updatedBlog = await Blog.findByIdAndUpdate(
       blogId,
       {
         $pull: { likes: req.id },
+        likesCount,
       },
       { new: true }
     )

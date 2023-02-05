@@ -5,7 +5,6 @@ const Blog = require("../models/blog.model");
 const app = express.Router();
 
 app.get("/", async (req, res) => {
-  console.log(req.ip);
   try {
     const blogs = await Blog.find()
       .sort({ _id: -1 })

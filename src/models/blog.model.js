@@ -36,6 +36,10 @@ const blogSchema = new mongoose.Schema(
         unique: true,
       },
     ],
+    likesCount: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
