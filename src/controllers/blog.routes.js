@@ -24,15 +24,14 @@ app.get("/", async (req, res) => {
 });
 //include authmiddleware
 app.post("/", authmiddleware, async (req, res) => {
-  const { title, article } = req.body;
-  console.log(title, article);
   try {
+    const { title, article } = req.body;
     const blog = await (
       await Blog.create({ author: req.id, title, article })
     ).populate("author");
     res.send({ error: false, message: "blog created successfully.", blog });
   } catch (e) {
-    res.send({ error: true, message: "unknown error occured." });
+    res.send({ error: true, message: e.message });
   }
 });
 
