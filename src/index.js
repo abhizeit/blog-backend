@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URI,
   },
 });
 io.on("connection", (socket) => {
@@ -56,7 +56,7 @@ app.use("/comments", commenRoutes);
 app.use("/likes", likeRoutes);
 app.use("/trending", trendingRoutes);
 
-httpServer.listen(8080, async () => {
+httpServer.listen(process.env.port || 8080, async () => {
   await connect();
   console.log("server is running on port 8080");
 });
