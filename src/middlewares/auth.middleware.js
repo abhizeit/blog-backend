@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
 const authmiddleware = async (req, res, next) => {
-  console.log("this is auth");
   const token = req.headers["authorization"];
   if (!token) {
     return res.send({ error: true, message: "no token found" });
@@ -18,7 +17,7 @@ const authmiddleware = async (req, res, next) => {
         req.id = user._id;
       }
     }
-    console.log("invoke next call.");
+    // console.log("invoke next call.");
     next();
   } catch (e) {
     res.send({

@@ -22,13 +22,34 @@ app.get("/", async (req, res) => {
     res.send({ error: true, message: e.messsage });
   }
 });
+
+app.get("/:id", async (req, res) => {
+  console.log("hello");
+  try {
+    const { id } = req.params;
+    const blog = await Blog.findById(id)
+      .populate({ path: "author", select: ["name", "_id", "email"] })
+      .populate({
+        path: "comments.commentAuthor",
+        select: ["name", "email", "_id"],
+      })
+      .populate({
+        path: "likes",
+        select: ["name", "email", "_id"],
+      });
+    res.send({ error: false, blog });
+  } catch (e) {
+    res.send({ error: true, message: e.messsage });
+  }
+});
 //include authmiddleware
 app.post("/", authmiddleware, async (req, res) => {
   try {
-    const { title, article } = req.body;
+    const { title, article, image } = req.body;
     const blog = await (
-      await Blog.create({ author: req.id, title, article })
+      await Blog.create({ author: req.id, title, article, image })
     ).populate("author");
+    console.log(blog);
     res.send({ error: false, message: "blog created successfully.", blog });
   } catch (e) {
     res.send({ error: true, message: e.message });
