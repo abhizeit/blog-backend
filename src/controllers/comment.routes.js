@@ -13,7 +13,7 @@ app.post("/", authmiddleware, async (req, res) => {
         $push: {
           comments: {
             $each: [{ commentString, commentAuthor: req.id }],
-            $postion: 0,
+            $position: 0,
           },
         },
       },
