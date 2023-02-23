@@ -70,18 +70,38 @@ app.delete("/:id", authmiddleware, async (req, res) => {
 });
 
 app.patch("/:id", authmiddleware, async (req, res) => {
-  const { title, article } = req.body;
-  const post = await Blog.findById(req.params.id);
-  if (req.id !== post._id) {
-    return res.status(401).send({ errro: true });
+  try {
+    const { title, article } = req.body;
+    const { id } = req.params;
+    const post = await Blog.findById(id);
+
+    if (!req.id.equals(post.author)) {
+      return res.status(401).send({
+        error: true,
+        message: "Your are not authorised to delete this blog.",
+      });
+    }
+
+    const blog = await Blog.findByIdAndUpdate(
+      id,
+      {
+        title,
+        article,
+      },
+      { new: true }
+    )
+      .populate({ path: "author", select: ["name", "_id", "email"] })
+      .populate({
+        path: "comments.commentAuthor",
+        select: ["name", "email", "_id"],
+      })
+      .populate({
+        path: "likes",
+        select: ["name", "email", "_id"],
+      });
+    res.send({ error: false, blog });
+  } catch (e) {
+    res.send({ error: true, message: e.message });
   }
-  const update = await Blog.findByIdAndUpdate(
-    post._id,
-    {
-      article,
-    },
-    { new: true }
-  );
-  res.send({ error: false, message: "post updated successfully.", update });
 });
 module.exports = app;

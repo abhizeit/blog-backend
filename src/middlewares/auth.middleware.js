@@ -6,7 +6,6 @@ const authmiddleware = async (req, res, next) => {
   if (!token) {
     return res.send({ error: true, message: "no token found" });
   }
-
   try {
     const verification = jwt.verify(token, process.env.JWT_SECRET);
     if (verification) {
@@ -17,7 +16,6 @@ const authmiddleware = async (req, res, next) => {
         req.id = user._id;
       }
     }
-    // console.log("invoke next call.");
     next();
   } catch (e) {
     res.send({

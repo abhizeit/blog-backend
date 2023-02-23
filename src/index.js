@@ -44,6 +44,9 @@ io.on("connection", (socket) => {
   socket.on("remove-like", (data) => {
     socket.broadcast.emit("remove-like", data);
   });
+  socket.on("update-blog", (data) => {
+    socket.broadcast.emit("update-blog", data);
+  });
 });
 
 app.get("/", (req, res) => {
