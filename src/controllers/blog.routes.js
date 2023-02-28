@@ -24,7 +24,6 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/:id", async (req, res) => {
-  console.log("hello");
   try {
     const { id } = req.params;
     const blog = await Blog.findById(id)
@@ -49,7 +48,6 @@ app.post("/", authmiddleware, async (req, res) => {
     const blog = await (
       await Blog.create({ author: req.id, title, article, image })
     ).populate("author");
-    console.log(blog);
     res.send({ error: false, message: "blog created successfully.", blog });
   } catch (e) {
     res.send({ error: true, message: e.message });
@@ -57,7 +55,6 @@ app.post("/", authmiddleware, async (req, res) => {
 });
 
 app.delete("/:id", authmiddleware, async (req, res) => {
-  console.log("delete triggered");
   const blog = await Blog.findById(req.params.id);
   if (!req.id.equals(blog.author)) {
     return res.status(401).send({

@@ -41,7 +41,6 @@ app.post("/", authmiddleware, async (req, res) => {
 
 app.patch("/", authmiddleware, async (req, res) => {
   const { blogId, commentId } = req.body;
-  console.log(blogId, commentId);
   try {
     const blog = await Blog.findByIdAndUpdate(
       blogId,
@@ -59,8 +58,6 @@ app.patch("/", authmiddleware, async (req, res) => {
         path: "likes",
         select: ["name", "email", "_id"],
       });
-    // blog.comments.id(commentId).remove();
-    // blog.save();
     res.send({
       error: false,
       message: "comment deleted successfully.",

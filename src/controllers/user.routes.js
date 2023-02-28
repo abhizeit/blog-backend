@@ -18,7 +18,6 @@ app.post("/refresh", async (req, res) => {
     res.send({ error: false, token, message: "new token generated" });
   } catch (e) {
     // redis.push(rToken)
-    console.log(e.message);
     res.send({ error: true, message: e.message });
   }
 });
@@ -83,13 +82,11 @@ app.post("/login", async (req, res) => {
       return res.send({ error: true, message: "Wrong Password!!" });
     }
   } catch (e) {
-    console.log(e.message);
     res.send({ error: true, message: "Wrong Credential!!" });
   }
 });
 
 app.get("/userdetails/", authmiddleware, (req, res) => {
-  console.log("this is user details");
   res.send("this is user details");
 });
 
